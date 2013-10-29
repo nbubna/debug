@@ -37,14 +37,13 @@
     debug.resolve = function(reference, context) {
         if (_.refRE.test(reference)) {
             context = context || window;
-            console.log('resolve', context, reference);
             return eval('context'+(reference.charAt(0) !== '[' ? '.'+reference : reference));
         }
     };
     debug.wrap = function(fn, id) {
         id = id || fn.name;
         var wrapper = function() {
-            _.out('Enter: ', id, arguments);
+            _.out('Enter: ', id, _.slice.call(arguments));
             var ret = fn.apply(this, arguments);
             _.out('Exit: ', id, ret);
             return ret;
@@ -59,6 +58,7 @@
     };
 
     var _ = debug._ = {
+        slice: Array.prototype.slice,
         version: "<%= pkg.version %>",
         refRE: /^([\w\$]+)?((\.[\w\$]+)|\[(\d+|'(\\'|[^'])+'|"(\\"|[^"])+")\])*$/,
         split: function(ref) {
